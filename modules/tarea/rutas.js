@@ -130,4 +130,10 @@ modulo.post('/:id/completado', function (req, res) {
     res.send('ok');
 });
 
+modulo.delete('/:id/borrar', function(req, res) {
+    var tarea = res.locals.tarea;
+    tarea.borrar();
+    res.send('ok');
+});
+
 module.exports = modulo;

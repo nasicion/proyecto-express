@@ -5,14 +5,25 @@
             <label class="mdl-textfield__label" for="titulo">Qué quieres hacer hoy...</label>
         </div>
     </form>
-    {{#each tareas}}
-    <div class="task-item">
-        <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect mdl-card__supporting-text " for="{{id}}">
-            <input type="checkbox" id="{{id}}" class="mdl-checkbox__input" {{#if completada}}checked{{/if}} />
-            <span class="mdl-checkbox__label">{{titulo}}</span>
-        </label>
-    </div>
-    {{/each}}
+    
+    {{#if tareas}}
+        {{#each tareas}}
+        <div class="task-item">
+            <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect mdl-card__supporting-text " for="{{id}}">
+                <input type="checkbox" id="{{id}}" class="mdl-checkbox__input" {{#if completada}}checked{{/if}} />
+                <span class="mdl-checkbox__label">{{titulo}}</span>
+                <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored red-background delete-button" style="float:right; height: 24px; line-height: 24px;" data="{{id}}">
+                   BORRAR
+                </a>
+            </label>
+        </div>
+        {{/each}}
+    {{else}}
+        <h1><i>Hurra mate</i>, no hay mas tareas!!
+    {{/if}}
+
+    <h1>Hay {{tareas.length}} tareas</h1>
+
     <div class="mdl-card__actions mdl-grid">
         <div class="mdl-cell mdl-cell--5-col">
             <span class="pending-task-count">{{ pendientes }}</span> tareas pendientes

@@ -47,7 +47,7 @@ app.use(function(err, req, res, next) {
 
 // Defino el puerto en el que escucha el servidor. Puede venir por
 // variables de entorno (por heroku) o usar el 8000
-app.set('port', (process.env.PORT || 8000));
+app.set('port', (process.env.PORT || 80));
 
 // Escucho en el puerto indicado
 app.listen(app.get('port'), function () {
