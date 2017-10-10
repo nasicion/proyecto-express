@@ -1,5 +1,6 @@
 var uuid = require('uuid');
 var _ = require('lodash');
+var db = require('mongodb');
 
 // En este caso guardo mis tareas en memoria, en una aplicacion de verdad esto estaria en
 // una base de datos. Pueden extender este ejemplo para usar una base de datos como
@@ -54,12 +55,13 @@ Tarea.crear = function (usuarioId, titulo) {
     // Creo una nueva instancia de tarea, el id sera generado automaticamente
     var tarea = new Tarea(null, usuarioId, titulo, false);
 
-    // Lo guardo en mi "base"
-    if (!tareasPorUsuario[usuarioId]) {
-        tareasPorUsuario[usuarioId] = {};
-    }
+    // // Lo guardo en mi "base"
+    // if (!tareasPorUsuario[usuarioId]) {
+    //     tareasPorUsuario[usuarioId] = {};
+    // }
 
-    tareasPorUsuario[usuarioId][tarea.id] = tarea;
+    // tareasPorUsuario[usuarioId][tarea.id] = tarea;
+    db.tasks.insert(tarea);
     return tarea;
 };
 
