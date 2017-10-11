@@ -66,8 +66,8 @@ function obtenerUsuarioId (req) {
     // Si no existe el usuario
     if (!usuarioId) {
         usuarioId = req.session.usuarioId = uuid.v4();
-        Tarea.crear(usuarioId, 'Hacer el proyecto de express');
-        Tarea.crear(usuarioId, 'Conquistar el mundo');
+        // Tarea.crear(usuarioId, 'Hacer el proyecto de express');
+        // Tarea.crear(usuarioId, 'Conquistar el mundo');
         // Despues de 10 minutos borramos todas las tareas del usuario
         setTimeout(function() {
             Tarea.borrarTodas(usuarioId);

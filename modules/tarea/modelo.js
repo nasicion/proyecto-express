@@ -1,6 +1,15 @@
 var uuid = require('uuid');
 var _ = require('lodash');
-var db = require('mongodb');
+
+
+const MongoClient = require('mongodb').MongoClient;
+
+var db
+
+MongoClient.connect('mongodb://localhost/tasks', (err, database) => {
+  if (err) return console.log(err)
+  db = database;
+});
 
 // En este caso guardo mis tareas en memoria, en una aplicacion de verdad esto estaria en
 // una base de datos. Pueden extender este ejemplo para usar una base de datos como
@@ -30,7 +39,7 @@ var tareasPorUsuario = {};
  */
 function Tarea (id, usuarioId, titulo, completada) {
     // Si no me asignan un id lo creo aleatoriamente
-    this.id = id || uuid.v4();
+    this._id = id || uuid.v4();
     this.usuarioId = usuarioId;
     this.titulo = titulo;
     this.completada = completada;
@@ -56,12 +65,9 @@ Tarea.crear = function (usuarioId, titulo) {
     var tarea = new Tarea(null, usuarioId, titulo, false);
 
     // // Lo guardo en mi "base"
-    // if (!tareasPorUsuario[usuarioId]) {
-    //     tareasPorUsuario[usuarioId] = {};
-    // }
-
-    // tareasPorUsuario[usuarioId][tarea.id] = tarea;
-    db.tasks.insert(tarea);
+    db.collection('tasks').save(tarea, (err, result) => {
+        if (err) console.log(err);
+    });
     return tarea;
 };
 
@@ -93,8 +99,10 @@ Tarea.borrarTodas = function (usuarioId) {
  */
 Tarea.buscarTodas = function (usuarioId) {
     // Si no hay tareas para ese usuario, devuelvo un mapa vacio
-    var tareas = tareasPorUsuario[usuarioId] || {};
-    return tareas;
+    db.collection('tasks').find().toArray((error, results) => {
+        
+        return results;
+    });
 };
 
 /**
