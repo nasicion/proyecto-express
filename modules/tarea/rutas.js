@@ -21,25 +21,46 @@ function setearVista (vista, req, res, next) {
  * Middleware que cuenta la cantidad de tareas pendientes para un usuario
  */
 function contarPendientes (req, res, next) {
-    var pendientes = Tarea.buscarPendientes(obtenerUsuarioId(req));
-    res.locals.pendientes = Object.keys(pendientes).length;
-    next();
+    Tarea.buscarPendientes(obtenerUsuarioId(req)).then(
+        function(items){
+            res.locals.pendientes = Object.keys(items).length;
+            next();
+        },
+        function(error){
+            console.error('error', error);
+            next();
+        }
+    );
 }
 
 /**
  * Middleware que carga todas las tareas para un usuario.
  */
 function buscarTodas (req, res, next) {
-    res.locals.tareas = Tarea.buscarTodas(obtenerUsuarioId(req));
-    next();
+    Tarea.buscarTodas(obtenerUsuarioId(req)).then(function(items) {
+        res.locals.tareas = items;
+        next(); 
+    }, function(error){
+        console.error('error', error);
+        next();
+    });
+    
 }
 
 /**
  * Middleware que carga las tareas completas para un usuario.
  */
 function buscarCompletas (req, res, next) {
-    res.locals.tareas = Tarea.buscarCompletas(obtenerUsuarioId(req));
-    next();
+    Tarea.buscarCompletas(obtenerUsuarioId(req)).then(
+        function(items){
+            res.locals.tareas = items;
+            next();
+        }, 
+        function(error){
+            console.error('error', error);
+            next();
+        }
+    );
 }
 
 /**
@@ -47,9 +68,17 @@ function buscarCompletas (req, res, next) {
  * que las tiene, las cuenta.
  */
 function buscarPendientes (req, res, next) {
-    res.locals.tareas = Tarea.buscarPendientes(obtenerUsuarioId(req));
-    res.locals.pendientes = Object.keys(res.locals.tareas).length;
-    next();
+    Tarea.buscarPendientes(obtenerUsuarioId(req)).then(
+        function(items){
+            res.locals.tareas = items;
+            res.locals.pendientes = Object.keys(res.locals.tareas).length;
+            next();
+        }, 
+        function(error){
+            console.error('error', error);
+            next();
+        }
+    );
 }
 
 /**
@@ -126,6 +155,7 @@ modulo.param('id', function (req, res, next, id) {
 
 // Ruta para marcar una tarea como completa
 modulo.post('/:id/completado', function (req, res) {
+    console.log(req.param.id);
     res.locals.tarea.completada = req.body.completada;
     res.send('ok');
 });

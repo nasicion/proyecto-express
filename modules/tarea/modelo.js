@@ -99,9 +99,9 @@ Tarea.borrarTodas = function (usuarioId) {
  */
 Tarea.buscarTodas = function (usuarioId) {
     // Si no hay tareas para ese usuario, devuelvo un mapa vacio
-    db.collection('tasks').find().toArray((error, results) => {
-        
-        return results;
+    return db.collection('tasks').find().toArray()
+    .then(function(items){
+        return items;
     });
 };
 
@@ -111,8 +111,11 @@ Tarea.buscarTodas = function (usuarioId) {
  * @return <id, Tarea>        Devuelve un mapa de tareas
  */
 Tarea.buscarPendientes = function (usuarioId) {
-    return _.filter(Tarea.buscarTodas(usuarioId), function (tarea) {
-        return !tarea.completada;
+    return db.collection('tasks').find({
+        completada : false
+    }).toArray()
+    .then(function(items){
+        return items;
     });
 };
 
@@ -122,8 +125,11 @@ Tarea.buscarPendientes = function (usuarioId) {
  * @return <id, Tarea>        Devuelve un mapa de tareas
  */
 Tarea.buscarCompletas = function (usuarioId) {
-    return _.filter(Tarea.buscarTodas(usuarioId), function (tarea) {
-        return tarea.completada;
+    return db.collection('tasks').find({
+        completada : true
+    }).toArray()
+    .then(function(items){
+        return items;
     });
 };
 
