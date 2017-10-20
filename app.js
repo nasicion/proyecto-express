@@ -32,7 +32,7 @@ app.engine('handlebars', hbs.engine);
 app.set('view engine', 'handlebars');
 
 // Monto las rutas
-app.use('/', tareas);
+app.use('/api/tareas/', tareas);
 
 // Manejo de paginas no encontradas
 app.use(function(req, res) {
