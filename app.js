@@ -1,8 +1,9 @@
 var express = require('express');
-var exphbs  = require('express-handlebars');
-var tareas = require('./modules/tarea/rutas');
+// var exphbs  = require('express-handlebars');
+var tareas = require('./server/modules/tarea/rutas');
 var bodyParser = require('body-parser');
 var session = require('express-session');
+var path = require('path');
 
 // Creo la instancia de express
 var app = express();
@@ -16,33 +17,39 @@ app.use(session({
 }));
 
 // Que sirva contenido estatico desde la carpeta public
-app.use(express.static('public'));
+// app.use(express.static('public'));
+app.use(express.static(path.join(__dirname, 'dist')));
 
 // Que interprete submits de formulario y pedidos json
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 // Configuro el motor de templates
-var hbs = exphbs.create({
-    defaultLayout: 'principal',
-    helpers: require('./views/helpers')
-});
+// var hbs = exphbs.create({
+//     defaultLayout: 'principal',
+//     helpers: require('./views/helpers')
+// });
 
-app.engine('handlebars', hbs.engine);
-app.set('view engine', 'handlebars');
+// app.engine('handlebars', hbs.engine);
+// app.set('view engine', 'handlebars');
 
 // Monto las rutas
 app.use('/api/tareas/', tareas);
 
+// Catch all other routes and return the index file
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'dist/index.html'));
+});
+
 // Manejo de paginas no encontradas
 app.use(function(req, res) {
-    res.status(404).render('no_encontrada');
+    res.status(404).send('no_encontrada');
 });
 
 // Manejo de pagina de error
 app.use(function(err, req, res, next) {
     console.log(err);
-    res.status(500).render('error');
+    res.status(500).send('error');
 });
 
 // Defino el puerto en el que escucha el servidor. Puede venir por

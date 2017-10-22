@@ -1,14 +1,53 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
 <head>
-  <meta charset="utf-8">
-  <title>Template</title>
-  <base href="/">
+    <meta charset="utf-8">
+    <title>Proyecto Acamica Express</title>
+    <link rel="stylesheet" href="assets/css/material.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:100,200,300,400,500,700" type="text/css">
+    <link rel="stylesheet" href="assets/css/main.css">
 
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="icon" type="image/x-icon" href="favicon.ico">
 </head>
 <body>
-  <app-root>Loading...</app-root>
+    <!-- Always shows a header, even in smaller screens. -->
+    <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+        <header class="mdl-layout__header">
+            <div class="mdl-layout__header-row">
+                <div class="page-logo">
+                    <img src="assets/images/logo-light.svg"/>
+                </div>
+                <!-- Title -->
+                <span class="mdl-layout-title">Proyecto lista de tareas</span>
+            </div>
+        </header>
+
+        <!-- <main class="mdl-layout__content">
+            <div class="page-content">
+                {{{body}}}
+            </div>
+        </main> -->
+        <app-task>
+          Loading...
+        </app-task>
+        <footer class="mdl-mini-footer">
+            <div class="mdl-mini-footer__left-section">
+                <div class="mdl-logo">Acamica</div>
+            </div>
+            <div class="mdl-mini-footer__right-section">
+                <ul class="mdl-mini-footer__link-list">
+                    <li><img src="assets/images/github.png"/><a href="https://github.com/acamica/proyecto-express">Ver en github</a></li>
+                    <li><img src="assets/images/logo-light.svg"/><a href="https://www.acamica.com/cursos/42/express">Ir al curso</a></li>
+                </ul>
+            </div>
+
+
+        </footer>
+    </div>
+    <script src="assets/js/material.min.js"></script>
+    <script src="assets/js/jquery2.min.js"></script>
+    <script src="assets/js/main.js"></script>
+
+
 </body>
 </html>
