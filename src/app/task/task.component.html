@@ -6,27 +6,23 @@
       </div>
   </form>
   
-  <!-- {{#if tareas}}
-      {{#each tareas}}
-      <div class="task-item">
-          <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect mdl-card__supporting-text " for="{{id}}">
-              <input type="checkbox" id="{{id}}" class="mdl-checkbox__input" {{#if completada}}checked{{/if}} />
-              <span class="mdl-checkbox__label">{{titulo}}</span>
-              <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored red-background delete-button" style="float:right; height: 24px; line-height: 24px;" data="{{id}}">
-                 BORRAR
-              </a>
-          </label>
-      </div>
-      {{/each}}
-  {{else}}
-      <h1><i>Hurra mate</i>, no hay mas tareas!!
-  {{/if}} -->
+  
+  <div *ngFor="let task of tasks" class="task-item">
+      <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect mdl-card__supporting-text " for="{{id}}">
+          <input type="checkbox" id="{{task._id}}" class="mdl-checkbox__input" />
+          <span class="mdl-checkbox__label">{{task.titulo}}</span>
+          <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored red-background delete-button" style="float:right; height: 24px; line-height: 24px;">
+              BORRAR
+          </a>
+      </label>
+  </div>
 
   <div class="mdl-card__actions mdl-grid">
       <div class="mdl-cell mdl-cell--5-col">
           <span class="pending-task-count">{{ pendientes }}</span> tareas pendientes
       </div>
       <div class="mdl-cell mdl-cell--7-col">
+
           <!-- <span class="task-filter {{#ifview "todas"}}active{{/ifview}}"><a href="/">Todas</a></span>
           <span class="task-filter {{#ifview "pendientes"}}active{{/ifview}}"><a href="/pendientes">Pendientes</a></span>
           <span class="task-filter {{#ifview "completas"}}active{{/ifview}}"><a href="/completas">Completas</a></span> -->
