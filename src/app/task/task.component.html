@@ -1,31 +1,32 @@
 <div class="task-list mdl-card mdl-shadow--2dp">
-  <form action="/crear" method="post">
+  <form action="/crear" method="post" (keydown)="formSubmit($event)">
       <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-          <input class="mdl-textfield__input" type="text" id="titulo" name="titulo" />
-          <label class="mdl-textfield__label" for="titulo">Qué quieres hacer hoy...</label>
+          <input class="mdl-textfield__input" type="text" id="title" name="title" [(ngModel)]="title"/>
+          <label class="mdl-textfield__label" for="title">Qué quieres hacer hoy...</label>
       </div>
   </form>
   
   
   <div *ngFor="let task of tasks" class="task-item">
       <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect mdl-card__supporting-text " for="{{id}}">
-          <input type="checkbox" id="{{task._id}}" class="mdl-checkbox__input" />
-          <span class="mdl-checkbox__label">{{task.titulo}}</span>
-          <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored red-background delete-button" style="float:right; height: 24px; line-height: 24px;">
+          <mat-checkbox id="{{task._id}}" (change)="markCompleted(task._id, $event)" [checked]="task.completada">{{task.titulo}}</mat-checkbox>
+          <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored red-background delete-button" 
+            style="float:right; height: 24px; line-height: 24px;"
+            (click)="delete(task._id)">
               BORRAR
           </a>
       </label>
   </div>
 
   <div class="mdl-card__actions mdl-grid">
-      <div class="mdl-cell mdl-cell--5-col">
-          <span class="pending-task-count">{{ pendientes }}</span> tareas pendientes
+      <div class="mdl-cell mdl-cell--5-col">  
+        <span class="pending-task-count" *ngIf="pendings">{{pendings.length}}</span> tareas pendientes
       </div>
       <div class="mdl-cell mdl-cell--7-col">
 
-          <!-- <span class="task-filter {{#ifview "todas"}}active{{/ifview}}"><a href="/">Todas</a></span>
-          <span class="task-filter {{#ifview "pendientes"}}active{{/ifview}}"><a href="/pendientes">Pendientes</a></span>
-          <span class="task-filter {{#ifview "completas"}}active{{/ifview}}"><a href="/completas">Completas</a></span> -->
+          <span class="task-filter" [ngClass]="{active:view.todas}"><a routerLink="/tasks" routerLinkActive="active">Todas</a></span>
+          <span class="task-filter" [ngClass]="{active:view.pendientes}"><a routerLink="/tasks/pendientes" routerLinkActive="active">Pendientes</a></span>
+          <span class="task-filter" [ngClass]="{active:view.completas}"><a routerLink="/tasks/completas" routerLinkActive="active">Completas</a></span>
       </div>
   </div>
 </div>

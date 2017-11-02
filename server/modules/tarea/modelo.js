@@ -48,11 +48,19 @@ function Tarea (id, usuarioId, titulo, completada) {
 /**
  * Metodo de instancia que borra la tarea de la lista
  */
-Tarea.prototype.borrar = function () {
-    if (tareasPorUsuario[this.usuarioId]) {
-        delete tareasPorUsuario[this.usuarioId][this.id];
-    }
+Tarea.borrar = function (id) {
+    db.collection('tasks').remove({ _id : id }, { justOne : true});
+    // if (tareasPorUsuario[this.usuarioId]) {
+    //     delete tareasPorUsuario[this.usuarioId][this.id];
+    // }
 };
+
+Tarea.update = function(tarea) {
+    db.collection('tasks').update(
+        {_id: tarea._id},
+        tarea
+    );
+}
 
 /**
  * Metodo de clase que crea una tarea y la guarda en "la base"
@@ -78,10 +86,7 @@ Tarea.crear = function (usuarioId, titulo) {
  * @return Tarea              La tarea si se encuentra o null
  */
 Tarea.buscarUno = function (usuarioId, id) {
-    if (tareasPorUsuario[usuarioId] && tareasPorUsuario[usuarioId][id]) {
-        return tareasPorUsuario[usuarioId][id];
-    }
-    return null;
+    return db.collection('tasks').findOne({_id : id});
 };
 
 /**

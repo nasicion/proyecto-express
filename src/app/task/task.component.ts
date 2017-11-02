@@ -1,25 +1,97 @@
 import { Component, OnInit } from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
 
 import { Task } from '../model/task.model';
 import { TaskService} from '../task.service';
 
 @Component({
-  selector: 'app-task',
+  // selector: 'app-task',
   templateUrl: './task.component.html',
   styleUrls: ['./task.component.css']
 })
 export class TaskComponent implements OnInit {
 
   tasks : Task[];
+  title : string;
+  pendings: Task[];
+  completed: Task[];
+  selectedView : string;
+  view : object;
+  
 
-  constructor(private taskService : TaskService) { }
+  constructor(
+    private taskService : TaskService,
+    private router : Router,
+    private route : ActivatedRoute) { }
 
   ngOnInit() : void {
-    this.getTasks();
+    this.route.params.subscribe(params => {
+      
+      this.view = {
+        todas: true,
+        pendientes: false,
+        completas: false
+      };
+      
+      this.selectedView = params['view'];
+      if(this.selectedView != undefined && this.selectedView != '') {
+        this.view[this.selectedView] = true;
+        this.view['todas'] = false;
+      }
+
+      this.getTasks();
+    });
+
+
+
+    
   }
 
   getTasks() : void {
-    this.taskService.getTasks().then(result => this.tasks = result);
+    var pendings = this.getPendings();
+    var completed = this.getCompleted();
+
+    Promise.all([pendings, completed])
+      .then((data) => {
+        if(this.view['completas']) {
+          this.tasks = this.completed;
+        } else if (this.view['pendientes']) {
+          this.tasks = this.pendings;
+        } else {
+          this.tasks = this.pendings.concat(this.completed);
+        }
+      });
   }
 
+  getPendings() : Promise<Task[]> {
+    return this.taskService.getPendings().then(result => this.pendings = result);
+  }
+
+  getCompleted() : Promise<Task[]> {
+    return this.taskService.getCompleted().then(result => this.completed = result);
+  }
+
+  markCompleted(id : any, event : any) : void {
+    this.taskService.markAsCompleted(id, event.checked);
+  }
+
+  createTask() : void {
+    this.taskService.createTask(this.title);
+    this.title = '';
+    this.getTasks();
+  }
+
+  formSubmit(event : any) {
+    if(event.keyCode == 13) {
+      console.log(this.title);
+      if(this.title != undefined && this.title != null && this.title != '') {
+        this.createTask();
+      }
+    }
+  }
+
+  delete(id : number) {
+    this.taskService.delete(id);
+    this.getTasks();
+  }
 }
