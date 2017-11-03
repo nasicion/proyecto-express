@@ -1,8 +1,13 @@
-<form class="login-form">
-  <mat-form-field>
-    <input matInput placeholder="username" value="">
-  </mat-form-field>
-  <mat-form-field>
-    <input matInput placeholder="password"/>
-  </mat-form-field>
-</form>
+<div class="login-panel">
+  <form ngNoForm id="loginForm" class="login-form" action="/api/usuarios/login" method="post" (keydown)="keyEvent($event)">
+    <mat-form-field>
+      <input matInput placeholder="username" name="username">
+    </mat-form-field>
+    <br>
+    <mat-form-field>
+      <input matInput placeholder="password" type="password" name="password"/>
+    </mat-form-field>
+  </form>
+
+  <a routerLink="/register" routerLinkActive="active">Register</a>
+</div>

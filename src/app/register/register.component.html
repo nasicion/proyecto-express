@@ -1,0 +1,32 @@
+<div class="register-panel">
+
+  <div class="mdl-layout__header header">
+    <h4>Register to use...</h4>
+  </div>
+  <div class="form-container">
+    <form ngNoForm method="post" action="api/usuarios/registrar">
+      <mat-form-field>
+        <input matInput placeholder="name" name="name" [disabled] = "requesting" [(ngModel)]="name">
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput placeholder="lastname" name="lastname" [disabled] = "requesting" [(ngModel)]="lastname">
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput placeholder="email" name="email" (keyup)="validateEmail()" [disabled] = "requesting" [(ngModel)]="email">
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput placeholder="confirm email" name="confirmEmail" (keyup)="validateEmail()" [disabled] = "requesting" [(ngModel)]="emailConfirmation">
+      </mat-form-field>
+      <div class="button-container">
+        <button type="button" mat-raised-button color="primary" 
+          (click)="register()" [disabled]="!validEmails">
+            Register
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+<div class="messages" *ngIf="showMessage" [ngClass]="{error : hasErrored}">
+  <a *ngIf="!hasErrored" [href]="message" target="_blank">Get your password here</a>
+  <div *ngIf="hasErrored">{{message}}</div>
+</div>

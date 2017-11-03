@@ -2,7 +2,8 @@ var express = require('express');
 var _       = require('lodash');
 var uuid    = require('uuid');
 var Tarea   = require('./modelo');
-var passport = require('passport');
+var passport = require('passport')
+    , LocalStrategy = require('passport-local').Strategy;;
 
 // Creo el modulo
 var modulo  = express.Router();
@@ -115,7 +116,6 @@ function imprimirLista (req, res) {
 
 // Ruta principal, muestra todas las tareas
 modulo.get('/', [
-    //passport.authenticate('local'),
     buscarTodas,
     contarPendientes,
     imprimirLista
@@ -123,7 +123,6 @@ modulo.get('/', [
 
 // Muestra las tareas completas
 modulo.get('/completas', [
-    //passport.authenticate('local'),
     buscarCompletas,
     contarPendientes,
     imprimirLista
@@ -132,13 +131,13 @@ modulo.get('/completas', [
 // Muestra las tareas pendientes, noten que no llama al middleware
 // contarPendientes porque la cuenta ya la hace buscarPendientes
 modulo.get('/pendientes', [
-    //passport.authenticate('local'),
     buscarPendientes,
     imprimirLista
 ]);
 
 // Ruta para crear una tarea
 modulo.post('/crear', function (req, res) {
+    console.log('res', res.statusCode);
     Tarea.crear(obtenerUsuarioId(req), req.body.titulo);
     res.status(200).send('ok');
 });
@@ -166,7 +165,10 @@ modulo.post('/:id/completado', function (req, res) {
 
 modulo.delete('/:id/borrar', function(req, res) {
     var tarea = res.locals.tarea;
-    tarea.then( tarea => { Tarea.borrar(tarea._id); } );
+    
+    tarea.then( tarea => { 
+        Tarea.borrar(tarea._id); 
+    } );
     res.send('ok');
 });
 

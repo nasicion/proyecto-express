@@ -1,15 +1,6 @@
+var db = require('../db/db');
 var uuid = require('uuid');
-var _ = require('lodash');
-
-
-const MongoClient = require('mongodb').MongoClient;
-
-var db
-
-MongoClient.connect('mongodb://localhost/tasks', (err, database) => {
-  if (err) return console.log(err)
-  db = database;
-});
+var ObjectID = require('mongodb').ObjectID;
 
 // En este caso guardo mis tareas en memoria, en una aplicacion de verdad esto estaria en
 // una base de datos. Pueden extender este ejemplo para usar una base de datos como
@@ -39,7 +30,7 @@ var tareasPorUsuario = {};
  */
 function Tarea (id, usuarioId, titulo, completada) {
     // Si no me asignan un id lo creo aleatoriamente
-    this._id = id || uuid.v4();
+    this._id = id || uuid.v5;
     this.usuarioId = usuarioId;
     this.titulo = titulo;
     this.completada = completada;
@@ -49,15 +40,15 @@ function Tarea (id, usuarioId, titulo, completada) {
  * Metodo de instancia que borra la tarea de la lista
  */
 Tarea.borrar = function (id) {
-    db.collection('tasks').remove({ _id : id }, { justOne : true});
+    db.getDb().collection('tasks').remove({ _id : new ObjectID(id) }, { justOne : true});
     // if (tareasPorUsuario[this.usuarioId]) {
     //     delete tareasPorUsuario[this.usuarioId][this.id];
     // }
 };
 
 Tarea.update = function(tarea) {
-    db.collection('tasks').update(
-        {_id: tarea._id},
+    db.getDb().collection('tasks').update(
+        {_id: new ObjectID(tarea._id)},
         tarea
     );
 }
@@ -73,7 +64,7 @@ Tarea.crear = function (usuarioId, titulo) {
     var tarea = new Tarea(null, usuarioId, titulo, false);
 
     // // Lo guardo en mi "base"
-    db.collection('tasks').save(tarea, (err, result) => {
+    db.getDb().collection('tasks').save(tarea, (err, result) => {
         if (err) console.log(err);
     });
     return tarea;
@@ -86,7 +77,7 @@ Tarea.crear = function (usuarioId, titulo) {
  * @return Tarea              La tarea si se encuentra o null
  */
 Tarea.buscarUno = function (usuarioId, id) {
-    return db.collection('tasks').findOne({_id : id});
+    return db.getDb().collection('tasks').findOne({_id : new ObjectID(id)});
 };
 
 /**
@@ -104,7 +95,7 @@ Tarea.borrarTodas = function (usuarioId) {
  */
 Tarea.buscarTodas = function (usuarioId) {
     // Si no hay tareas para ese usuario, devuelvo un mapa vacio
-    return db.collection('tasks').find().toArray()
+    return db.getDb().collection('tasks').find().toArray()
     .then(function(items){
         return items;
     });
@@ -116,7 +107,7 @@ Tarea.buscarTodas = function (usuarioId) {
  * @return <id, Tarea>        Devuelve un mapa de tareas
  */
 Tarea.buscarPendientes = function (usuarioId) {
-    return db.collection('tasks').find({
+    return db.getDb().collection('tasks').find({
         completada : false
     }).toArray()
     .then(function(items){
@@ -130,7 +121,7 @@ Tarea.buscarPendientes = function (usuarioId) {
  * @return <id, Tarea>        Devuelve un mapa de tareas
  */
 Tarea.buscarCompletas = function (usuarioId) {
-    return db.collection('tasks').find({
+    return db.getDb().collection('tasks').find({
         completada : true
     }).toArray()
     .then(function(items){

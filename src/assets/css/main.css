@@ -34,6 +34,16 @@
 .footer_links {
 
 }
+
+footer {
+    bottom: 0;
+    position: fixed;
+    width: 99%;
+
+    /** para testing **/
+    display: none !important;
+}
+
 .mdl-mini-footer__link-list img {
     height: 18px;
     margin-right: 5px;
@@ -94,4 +104,43 @@
 
 .red-background {
     background: red !important;
+}
+
+.login-panel {
+    border: 1px solid lightgray;
+    margin: 2em auto;
+    padding: 2em;
+    width: 15em;
+}
+
+.register-panel {
+    border: 1px solid lightgray;
+    margin: 4em auto;
+    width: 20em;
+}
+
+.register-panel .header {
+    padding: 0 1em;
+}
+
+.register-panel .form-container {
+    padding: 2em;
+}
+
+.register-panel .button-container {
+    text-align: right;
+}
+
+.messages {
+    border: 1px solid darkgreen;
+    padding: 1em;
+    text-align: center;
+    color: darkgreen;
+    background: lightgreen;
+}
+
+.messages.error {
+    border: 1px solid darkred !important;
+    color: darkred !important;
+    background: salmon !important;
 }

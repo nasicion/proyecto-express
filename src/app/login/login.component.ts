@@ -12,4 +12,10 @@ export class LoginComponent implements OnInit {
   ngOnInit() {
   }
 
+
+  keyEvent = function(event) : void {
+    if(event.keyCode == '13') {
+      (document.getElementById(event.target.form.id) as HTMLFormElement).submit();
+    }
+  }
 }

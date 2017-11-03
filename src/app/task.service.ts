@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Headers, Http } from '@angular/http';
+import { HttpClient,  } from '@angular/common/http';
 
 import 'rxjs/add/operator/toPromise';
 
@@ -8,44 +8,75 @@ import { Task } from './model/task.model';
 @Injectable()
 export class TaskService {
 
-  constructor(private http : Http) { }
+  constructor(private http : HttpClient) { }
 
 
+  /**
+   * Retrieve all tasks for the user
+   */
   getTasks() : Promise<Task[]> {
     return this.http.get('api/tareas/').toPromise()
-      .then(response => {return response.json() as Task[]})
+      .then(response => {
+        return response as Task[];
+      })
       .catch(this.handleError);
   }
 
+  /**
+   * Mark the task as completed
+   * @param id 
+   * @param completada 
+   */
   markAsCompleted(id : string, completada : boolean) : void {
-    this.http.post('api/tareas/' + id + '/completado',
-      {"completada" : completada}).toPromise()
-      .then(response => { })
-      .catch(this.handleError);
+    this.http.post(
+      'api/tareas/' + id + '/completado',
+      {"completada" : completada},
+      {responseType : "text"}
+    ).toPromise().catch(this.handleError);
   }
 
-  createTask(title : string) : void {
-      this.http.post('api/tareas/crear',
-        {"titulo" : title}).toPromise()
-        .then(response => { console.log(response) })
-        .catch(this.handleError);
+  /**
+   * Create the a new task
+   * @param title - title of the task
+   */
+  createTask(title : string) : Promise<any> {
+    return this.http.post(
+        'api/tareas/crear',
+        {"titulo" : title},
+        {responseType : 'text'}
+      ).toPromise().catch(this.handleError);
   }
 
+  /**
+   * Delete the task with the provided id
+   * @param id - task id
+   */
   delete(id : number) {
-    this.http.delete('api/tareas/' + id + '/borrar').toPromise()
+    this.http.delete('api/tareas/' + id + '/borrar', {responseType : 'text'})
+      .toPromise()
       .catch(this.handleError);
   }
 
 
+  /**
+   * Retrieve the pending tasks for the user
+   */
   getPendings() {
     return this.http.get('api/tareas/pendientes/').toPromise()
-    .then(response => { return response.json() as Task[] })
+    .then(response => { 
+      return response as Task[] 
+    })
     .catch(this.handleError);
   }
 
+  /**
+   * Retrievbe the completed tasks
+   */
   getCompleted() {
     return this.http.get('api/tareas/completas/').toPromise()
-    .then(response => { return response.json() as Task[] })
+    .then(response => { 
+      return response as Task[] 
+    })
     .catch(this.handleError);
   }
 
@@ -55,7 +86,6 @@ export class TaskService {
    * @param error 
    */
   private handleError(error: any): Promise<any> {
-    console.error('An error occurred', error); // for demo purposes only
-    return Promise.reject(error.message || error);
+    return Promise.reject(error);
   }
 }

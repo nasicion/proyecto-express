@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
+import { AppComponent } from '../app.component'
 import { Task } from '../model/task.model';
 import { TaskService} from '../task.service';
 
@@ -22,9 +23,11 @@ export class TaskComponent implements OnInit {
   constructor(
     private taskService : TaskService,
     private router : Router,
-    private route : ActivatedRoute) { }
+    private route : ActivatedRoute,
+    private appComponent : AppComponent) { }
 
   ngOnInit() : void {
+    
     this.route.params.subscribe(params => {
       
       this.view = {
@@ -60,7 +63,7 @@ export class TaskComponent implements OnInit {
         } else {
           this.tasks = this.pendings.concat(this.completed);
         }
-      });
+      }).catch(error => {this.appComponent.handleHttpError(error)});
   }
 
   getPendings() : Promise<Task[]> {
@@ -76,14 +79,16 @@ export class TaskComponent implements OnInit {
   }
 
   createTask() : void {
-    this.taskService.createTask(this.title);
-    this.title = '';
-    this.getTasks();
+    this.taskService.createTask(this.title)
+    .then( response => {
+      this.title = '';
+      this.getTasks();
+    }).catch(error => this.appComponent.handleHttpError(error));
+    
   }
 
   formSubmit(event : any) {
     if(event.keyCode == 13) {
-      console.log(this.title);
       if(this.title != undefined && this.title != null && this.title != '') {
         this.createTask();
       }
