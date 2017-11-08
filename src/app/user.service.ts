@@ -16,6 +16,14 @@ export class UserService {
     .catch(this.handleError);
   }
 
+  getLoggedUser = function() {
+    return this.http.get(usersApiUrl + 'logged').toPromise().catch(this.handleError);
+  }
+
+  logout = function() {
+    return this.http.post(usersApiUrl + 'logout').toPromise().catch(this.handleError);
+  }
+
   /**
    * Handles errors
    * @param error 

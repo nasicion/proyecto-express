@@ -144,3 +144,10 @@ footer {
     color: darkred !important;
     background: salmon !important;
 }
+
+.login-menu {
+    text-align: right;
+    position: relative;
+    float: right;
+    width: 80%;
+}

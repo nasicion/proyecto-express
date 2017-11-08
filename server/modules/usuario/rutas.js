@@ -20,6 +20,22 @@ rutas.post('/login',
     })    
 );
 
+rutas.get('/logout', function(req, res){
+    console.log('aca');
+    req.logout();
+    req.session.destroy(function(err) {
+        console.error('error destroying session', err);
+        console.log('session', req.session);
+        req.session = null;
+        res.redirect('/');
+    });
+    
+});
+
+rutas.get('/logged', function(req, res) { 
+    res.send(req.user);
+ });
+
 rutas.post('/register', function(req, res) {
     
     var body = req.body;
@@ -29,6 +45,8 @@ rutas.post('/register', function(req, res) {
     
     userByEmail
     .then( user => {
+
+        // If user with email exist reject it
         if(user) {
             res.send({success : false, message : EMAIL_ALREADY_USED_MESSAGE});
             return;

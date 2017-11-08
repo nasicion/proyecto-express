@@ -1,0 +1,5 @@
+
+<button *ngIf="user" mat-button [matMenuTriggerFor]="menu">{{user.name}} {{user.lastname}}</button>
+<mat-menu #menu="matMenu">
+  <a href="/api/usuarios/logout" mat-menu-item>Logout</a>
+</mat-menu>

@@ -6,7 +6,7 @@ import { RouterModule, Routes } from '@angular/router';
 
 //Ng Materials
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
-import { MatCheckboxModule, MatInputModule, MatButtonModule } from '@angular/material'
+import { MatCheckboxModule, MatInputModule, MatButtonModule, MatMenuModule } from '@angular/material'
 
 import { AppComponent } from './app.component';
 import { TaskComponent } from './task/task.component';
@@ -14,13 +14,15 @@ import { TaskService } from './task.service';
 import { UserService } from './user.service';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
+import { UserwidgetComponent } from './userwidget/userwidget.component';
 
 const appRoutes : Routes = [
   { path: '', pathMatch : 'prefix' ,redirectTo : 'tasks/'},
   { path : 'tasks', component : TaskComponent },
   { path : 'tasks/:view', component : TaskComponent },
   { path : 'login', component : LoginComponent },
-  { path: 'register', component : RegisterComponent },
+  { path : 'register', component : RegisterComponent },
+  { path : 'api/usuarios/logout', redirectTo : '/' },
   { path : '401', redirectTo : 'login' }
 ];
 
@@ -29,7 +31,8 @@ const appRoutes : Routes = [
     AppComponent,
     TaskComponent,
     LoginComponent,
-    RegisterComponent
+    RegisterComponent,
+    UserwidgetComponent
   ],
   imports: [
     RouterModule.forRoot(appRoutes, {enableTracing: false}),
@@ -39,11 +42,12 @@ const appRoutes : Routes = [
     MatCheckboxModule,
     MatInputModule,
     MatButtonModule,
+    MatMenuModule,
     BrowserAnimationsModule
   ],
   providers: [TaskService, UserService],
   // bootstrap: [TaskComponent]
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent, UserwidgetComponent]
 })
 export class AppModule { }
 

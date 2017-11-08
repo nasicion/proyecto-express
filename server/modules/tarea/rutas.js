@@ -111,6 +111,7 @@ function obtenerUsuarioId (req) {
  * Middleware que imprime la lista de tareas
  */
 function imprimirLista (req, res) {
+    
     res.send(res.locals.tareas);
 }
 

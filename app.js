@@ -11,6 +11,7 @@ var usuarios = require('./server/modules/usuario/rutas');
 var User = require('./server/modules/usuario/modelo');
 
 var db = require('./server/modules/db/db');
+var ObjectID = require('mongodb').ObjectID;
 
 // Creo la instancia de express
 var app = express();
@@ -27,12 +28,24 @@ app.use(session({ secret : "dogos" }));
 app.use(passport.initialize());
 app.use(passport.session());
 
+
+/**
+ * PassportJS configuration
+ */
 passport.serializeUser(function(user, done) {
-    done(null, user);
+    done(null, user._id);
   });
   
-passport.deserializeUser(function(user, done) {
-    done(null, user);
+passport.deserializeUser(function(id, done) {
+    var userPromise = db.getDb().collection('user').find({ "_id" : new ObjectID(id) })
+    .project({
+        name : 1,
+        lastname : 1,
+        username : 1,
+        email : 1
+    }).toArray().then(users => { 
+        done(null, users[0]);
+     });
 });
 
 passport.use(
